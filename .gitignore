@@ -1,5 +1,6 @@
 ### Custom
 keys/terraform-runner-gcp.json
+.env
 
 ### Terraform.gitignore
 
