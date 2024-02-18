@@ -19,11 +19,11 @@ provider "google" {
   # 2. add the path under GOOGLE_CREDENTIALS environmental variable
   # 3. authenticate with the gcloud cli. In that case, Terraform will use your privileges, which may
   # lead to inconsistent behaviours when different users run the code. 
-  credentials = file("./keys/terraform-runner-gcp.json")
+  credentials = file(var.path_to_credentials)
 
   project = "terraform-demo-414219"
-  region  = "europe-west2"
-  zone    = "europe-west2-a"
+  region  = var.region
+  zone    = var.zone
 }
 
 # Add resources below. A resource might be (1) a physical component such as a 
@@ -32,13 +32,13 @@ provider "google" {
 resource "google_storage_bucket" "demo-bucket" {
   # This is a GCP bucket with a auto-expiry date. Its name MUST be globally unique.
   name          = "terraform-demo-bucket-auto-expirying"
-  location      = "EU"
+  location      = var.region
   force_destroy = true
 
   lifecycle_rule {
     # autodelete after xx days
     condition {
-      age = 3 
+      age = 3
     }
     action {
       type = "Delete"
@@ -54,5 +54,17 @@ resource "google_storage_bucket" "demo-bucket" {
       type = "AbortIncompleteMultipartUpload"
     }
   }
+}
 
+
+resource "google_bigquery_dataset" "example_dataset" {
+  dataset_id                  = "example_dataset"
+  friendly_name               = "test"
+  description                 = "This is a test description"
+  location                    = var.region
+  default_table_expiration_ms = 3600000
+
+  labels = {
+    env = "default"
+  }
 }

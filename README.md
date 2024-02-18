@@ -34,16 +34,24 @@ For CI/CD, part of it could be triggered by (say) github action or similar.
 - run `terraform init` to get the GCP provider.
 
 
-## Deploy new resources.
+## Development environment
+
+The following assumes you are working locally to a *development* project.
+
+### Deploy new resources:
 
 - `terraform plan`. Check the plan - in particular the options and defaults of all resources to be created.
 
-- `terraform apply`. To deploy.
+- `terraform apply`. To deploy. A snapshot of the resources deployed will be stored in a `terraform.tfstate` local file.
 
-
-## Destroy resources
+### Destroy resources
 
 - `terraform destroy`
+
+
+## Production environment
+
+The `terraform.tfstate` file should be stored on cloud in a place that is secure but also accessible to those in your team with permission to deploy new infrastructure. This may also be a service account triggered by Github, for example. See also this [guide](https://spacelift.io/blog/terraform-state) for more examples.
 
 
 ## Way of working
@@ -51,6 +59,15 @@ For CI/CD, part of it could be triggered by (say) github action or similar.
 - After every update to the Terraform code, ensure to format as `terraform fmt`.
 
 - Refer to the [Terraform Registry](https://registry.terraform.io/) for snippets of code; [start here for GCP specific content](https://registry.terraform.io/providers/hashicorp/google/latest/docs).
+
+- Terraform provides snippets of code ready to copy and paste. It's worth:
+
+    - Checking with fields are actually required.
+
+    - Use `terraform plan` to double check the defaults are assigned to the properties of the resources. 
+
+- variables and default (e.g. resource default region/zone) are defined in `variables.tf` and referred as `var.VAR_NAME`.
+
 
 - [Using environmental variables](https://support.hashicorp.com/hc/en-us/articles/4547786359571-Reading-and-using-environment-variables-in-Terraform-runs#:~:text=Terraform%20can%20directly%20access%20environment,using%20variable%20%22foo%22%20%7B%7D%20.): Terraform can directly access environment variables that are named using the pattern `TF_VAR_`. Otherwise, use the external data source.
 
