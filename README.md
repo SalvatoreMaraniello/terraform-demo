@@ -18,7 +18,7 @@ For CI/CD, part of it could be triggered by (say) github action or similar.
 
     To verify is all good, try: `terraform -help`
 
-- A GCP service account with permissions: BigQuery Admin, Compute Admin & Storage Admin.
+- A GCP service account with permissions: BigQuery Admin, Compute Admin & Storage Admin. Add its json key under under `keys/terraform-runner-gcp.json`.
     - If you are running Terraform from your workstation, you can also use `gcloud` and authenticate using *User Application Default Credentials* ("ADCs") as a primary authentication method. You can enable ADCs using `gcloud auth application-default login`. See also [Google provider configuration reference](https://registry.terraform.io/providers/hashicorp/google/latest/docs/guides/provider_reference)
 
 
@@ -29,7 +29,7 @@ For CI/CD, part of it could be triggered by (say) github action or similar.
         GCP_PROJECT_ID=***
         ```
 
-    - If authenticating using service account, Terraform will need the path to service account json key. We assume here this is under `keys/terraform-runner-gcp.json`.
+    - If authenticating using service account, Terraform will need the path to service account json key:
         ```sh
         # Path to service account json key (optional). 
         GOOGLE_CREDENTIALS=keys/terraform-runner-gcp.json
